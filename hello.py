@@ -1,14 +1,37 @@
-from flask import Flask
+from flask import Flask, render_template
+from datetime import datetime
+from flask_moment import Moment
+
+# ensure bootstrap is installed
+try:
+    from flask_bootstrap import Bootstrap
+except ImportError:
+    Bootstrap = None
 
 app = Flask(__name__)
-@app.route('/')
 
+# init ext
+moment = Moment(app)
+if Bootstrap:
+    bootstrap = Bootstrap(app)
+
+# main /index share same vision，and pass in current_time
+@app.route('/')
+@app.route('/index')
 def index():
-	return '<h1>Hello World!</h1>'
+    return render_template('index.html', current_time=datetime.utcnow())
 
 @app.route('/user/<name>')
 def user(name):
-	return '<h1>Hello, %s!</h1>' % name
+    return render_template('user.html', name=name)
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
+
+@app.errorhandler(500)
+def internal_server_error(e):
+    return render_template('500.html'), 500
 
 if __name__ == '__main__':
-	app.run(debug=True)
+    app.run(debug=True)
