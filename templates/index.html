@@ -1,6 +1,25 @@
 {% extends "base.html" %}
-{% block content %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Flasky{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+	<h1>Hello, {% if name %}{{ name }}{% else %}Stranger{% endif %}!</h1>
+</div>
+
+{% if is_uoft is not none %}
+  {% if is_uoft %}
+    <h1>Your UofT email is {{ email }}.</h1>
+  {% else %}
+    <h1>Please use your UofT email.</h1>
+  {% endif %}
+{% endif %}
+
+{{ wtf.quick_form(form) }}
+<!--
 <h1>Hello, Lynne!</h1>
 <p>The local date and time is {{ moment(current_time).format('LLL') }}.</p>
 <p>That was {{ moment(current_time).fromNow(refresh=True) }}</p>
+-->
 {% endblock %}
